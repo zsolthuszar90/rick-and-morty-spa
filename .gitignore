@@ -32,3 +32,6 @@ test-results
 
 # TanStack Router plugin cache
 .tanstack
+
+# Private working notes
+NOTES.md
