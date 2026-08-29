@@ -37,6 +37,13 @@ URL.
 
 **Playwright** for e2e, against a production build rather than the dev server.
 
+**A hand-written API client**, rather than the official `rickmortyapi` package.
+Its calls resolve on every response and hand back a status code instead of
+throwing, so TanStack Query would treat a 404 as a success and never show an
+error state. It also has no way to pass an `AbortSignal`, so requests can't be
+cancelled. Wrapping it to fix both would be more code than the client it
+replaces.
+
 ## Getting started
 
 ```bash
