@@ -3,6 +3,7 @@ import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
+import { ApiError } from './api/characters'
 import { routeTree } from './routeTree.gen'
 import './index.css'
 
@@ -11,7 +12,10 @@ const queryClient = new QueryClient({
     queries: {
       // The Rick & Morty dataset is static, so cached pages stay valid for a while.
       staleTime: 5 * 60 * 1000,
-      retry: 1,
+      retry: (failureCount, error) => {
+        if (error instanceof ApiError && error.status < 500) return false
+        return failureCount < 1
+      },
     },
   },
 })
