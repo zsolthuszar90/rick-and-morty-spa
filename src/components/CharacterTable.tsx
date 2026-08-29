@@ -1,4 +1,5 @@
 import type { Character, CharacterStatus } from '@/api/types'
+import { CharacterAvatar } from '@/components/CharacterAvatar'
 import {
   Table,
   TableBody,
@@ -35,17 +36,14 @@ export const CharacterTable = ({ characters }: CharacterTableProps) => (
       {characters.map((character) => (
         <TableRow key={character.id}>
           <TableCell>
-            <img
-              src={character.image}
-              alt=""
-              width={40}
-              height={40}
-              loading="lazy"
-              className="size-10 rounded-full object-cover"
-            />
+            <CharacterAvatar src={character.image} />
           </TableCell>
-          <TableCell className="font-medium">{character.name}</TableCell>
-          <TableCell>{character.species}</TableCell>
+          <TableCell className="min-w-32 font-medium wrap-break-word whitespace-normal">
+            {character.name}
+          </TableCell>
+          <TableCell className="wrap-break-word whitespace-normal">
+            {character.species}
+          </TableCell>
           <TableCell>
             <span className="flex items-center gap-2">
               <span
