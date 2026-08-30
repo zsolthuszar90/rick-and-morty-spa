@@ -70,6 +70,15 @@ a direct link.
 **Skeletons mirror the real layout** — same columns, same row count as a real
 page — so nothing moves when the data arrives.
 
+**Search runs on the server, not over the rows already loaded.** Filtering the
+current page would mean searching 20 of 826 characters, so "beth" on page one
+finds nothing. The query lives in the URL as `?q=`, the input stays instant, and
+only the request is debounced.
+
+**The API's rate limit is left in place rather than worked around.** One page
+costs 21 requests against a limit of about 30, so user easily gets throttled. Requests retry past the block, and a toast explains the
+wait.
+
 **Avatars have empty alt text.** The name is in the next cell, so a screen reader
 would otherwise announce it twice.
 

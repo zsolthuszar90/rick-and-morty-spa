@@ -8,6 +8,7 @@ import { CharacterProfile } from '@/components/CharacterProfile'
 import { CharacterProfileSkeleton } from '@/components/CharacterProfileSkeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
+import { useApiRetryToast } from '@/hooks/useApiRetryToast'
 
 const parseId = (value: string) => {
   const id = Number(value)
@@ -22,16 +23,18 @@ const CharacterProfilePage = () => {
   const router = useRouter()
   const navigate = useNavigate()
 
-  const { data, isPending, isError, error } = useQuery(
+  const { data, isPending, isError, error, failureCount } = useQuery(
     characterQueries.detail(id),
   )
+
+  useApiRetryToast(failureCount)
 
   const goBack = () => {
     if (router.history.canGoBack()) {
       router.history.back()
       return
     }
-    navigate({ to: '/' })
+    navigate({ to: '/', search: {} })
   }
 
   const notFound = error instanceof ApiError && error.status === 404
