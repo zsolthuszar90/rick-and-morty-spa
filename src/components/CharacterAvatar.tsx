@@ -4,11 +4,12 @@ import { cn } from '@/lib/utils'
 
 type AvatarState = 'loading' | 'loaded' | 'failed'
 
-interface CharacterAvatarProps {
+type CharacterAvatarProps = {
   src: string
+  className?: string
 }
 
-export const CharacterAvatar = ({ src }: CharacterAvatarProps) => {
+export const CharacterAvatar = ({ src, className }: CharacterAvatarProps) => {
   const [state, setState] = useState<AvatarState>('loading')
   const imageRef = useRef<HTMLImageElement>(null)
 
@@ -21,16 +22,15 @@ export const CharacterAvatar = ({ src }: CharacterAvatarProps) => {
   return (
     <div
       className={cn(
-        'bg-muted size-10 overflow-hidden rounded-full',
+        'bg-muted size-10 shrink-0 overflow-hidden rounded-full',
         state === 'loading' && 'animate-pulse',
+        className,
       )}
     >
       <img
         ref={imageRef}
         src={src}
         alt=""
-        width={40}
-        height={40}
         loading="lazy"
         onLoad={() => setState('loaded')}
         onError={() => setState('failed')}
