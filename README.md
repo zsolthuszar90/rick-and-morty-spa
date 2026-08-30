@@ -1,5 +1,7 @@
 # Rick & Morty SPA
 
+[![CI](https://github.com/zsolthuszar90/rick-and-morty-spa/actions/workflows/ci.yml/badge.svg)](https://github.com/zsolthuszar90/rick-and-morty-spa/actions/workflows/ci.yml)
+
 Lists [Rick & Morty](https://rickandmortyapi.com/) characters in a table, with a
 profile page for each. Coding assignment.
 
@@ -81,3 +83,7 @@ npm run dev
 `build` typechecks then builds, `preview` serves the result. `lint` runs oxlint,
 `format` and `format:check` run Prettier. `test` and `test:watch` run Vitest,
 `test:e2e` runs Playwright (needs `npx playwright install chromium` first).
+
+A pre-commit hook formats and lints the staged files, then typechecks and runs
+the tests. A pre-push hook runs the Playwright suite, which needs the network
+since it hits the real API. CI runs everything again on push.
