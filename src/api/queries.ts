@@ -1,4 +1,4 @@
-import { queryOptions } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 
 import { fetchCharacter, fetchCharacters } from './characters'
 import type { CharacterQuery } from './types'
@@ -8,6 +8,7 @@ export const characterQueries = {
     queryOptions({
       queryKey: ['characters', query],
       queryFn: ({ signal }) => fetchCharacters(query, signal),
+      placeholderData: keepPreviousData,
     }),
 
   detail: (id: number) =>
