@@ -2,12 +2,12 @@ export type CharacterStatus = 'Alive' | 'Dead' | 'unknown'
 
 export type CharacterGender = 'Female' | 'Male' | 'Genderless' | 'unknown'
 
-export interface CharacterPlace {
+export type CharacterPlace = {
   name: string
   url: string
 }
 
-export interface Character {
+export type Character = {
   id: number
   name: string
   status: CharacterStatus
@@ -22,19 +22,19 @@ export interface Character {
   created: string
 }
 
-export interface PageInfo {
+export type PageInfo = {
   count: number
   pages: number
   next: string | null
   prev: string | null
 }
 
-export interface CharacterPage {
+export type CharacterPage = {
   info: PageInfo
   results: Character[]
 }
 
-export interface CharacterQuery {
+export type CharacterQuery = {
   page?: number
   name?: string
 }
