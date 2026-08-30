@@ -70,6 +70,12 @@ a direct link.
 **Skeletons mirror the real layout** — same columns, same row count as a real
 page — so nothing moves when the data arrives.
 
+**Pagination and search both live in the URL**, so any view can be refreshed or
+shared. Page 1 is left out of the URL rather than written as `?page=1`, and
+starting a search drops the page, since a search on page 30 would otherwise show
+nothing. `keepPreviousData` keeps the current rows on screen while the next page
+loads instead of flashing a skeleton.
+
 **Search runs on the server, not over the rows already loaded.** Filtering the
 current page would mean searching 20 of 826 characters, so "beth" on page one
 finds nothing. The query lives in the URL as `?q=`, the input stays instant, and
