@@ -40,8 +40,13 @@ const CharacterProfilePage = () => {
   const notFound = error instanceof ApiError && error.status === 404
 
   return (
-    <div className="space-y-6">
-      <Button variant="ghost" size="sm" className="-ml-2" onClick={goBack}>
+    <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto">
+      <Button
+        variant="ghost"
+        size="sm"
+        className="-ml-2 self-start"
+        onClick={goBack}
+      >
         <ArrowLeft />
         Back
       </Button>
