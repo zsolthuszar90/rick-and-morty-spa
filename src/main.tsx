@@ -1,24 +1,14 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import { ApiError } from './api/characters'
+import { createQueryClient } from './api/queryClient'
+import { Toaster } from './components/ui/sonner'
 import { routeTree } from './routeTree.gen'
 import './index.css'
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      // The Rick & Morty dataset is static, so cached pages stay valid for a while.
-      staleTime: 5 * 60 * 1000,
-      retry: (failureCount, error) => {
-        if (error instanceof ApiError && error.status < 500) return false
-        return failureCount < 1
-      },
-    },
-  },
-})
+const queryClient = createQueryClient()
 
 const router = createRouter({
   routeTree,
@@ -37,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <Toaster position="top-center" closeButton />
     </QueryClientProvider>
   </StrictMode>,
 )
