@@ -3,6 +3,12 @@
 Lists [Rick & Morty](https://rickandmortyapi.com/) characters in a table, with a
 profile page for each. Coding assignment.
 
+## Features
+
+The home page lists characters in a table with their avatar, name, species and
+status. Clicking a name opens that character's profile, which has a Back button.
+Both pages show a skeleton while loading and an alert if the request fails.
+
 ## Toolchain decisions
 
 This is my go-to setup for SPA projects, so most of it was less a decision than a
@@ -43,6 +49,27 @@ throwing, so TanStack Query would treat a 404 as a success and never show an
 error state. It also has no way to pass an `AbortSignal`, so requests can't be
 cancelled. Wrapping it to fix both would be more code than the client it
 replaces.
+
+## Implementation decisions
+
+**The API returns 404 for two different things**: a name search that matched
+nothing, and a character id that doesn't exist. The first is a normal empty
+result, so it comes back as an empty page. The second stays an error. Same
+status code, opposite handling.
+
+**Route params are parsed at the route boundary.** `/character/abc` is rejected
+before anything is requested, so `id` is a number everywhere inside instead of a
+string that might turn into `NaN`.
+
+**Back uses browser history when there is any**, so returning to the table keeps
+its state, and falls back to the character list when the profile was opened from
+a direct link.
+
+**Skeletons mirror the real layout** — same columns, same row count as a real
+page — so nothing moves when the data arrives.
+
+**Avatars have empty alt text.** The name is in the next cell, so a screen reader
+would otherwise announce it twice.
 
 ## Getting started
 
