@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { TriangleAlert } from 'lucide-react'
 
 import { characterQueries } from '@/api/queries'
 import { CharacterTable } from '@/components/CharacterTable'
+import { CharacterTableSkeleton } from '@/components/CharacterTableSkeleton'
+import { Alert, AlertAction, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 
 const HomePage = () => {
@@ -16,18 +19,19 @@ const HomePage = () => {
         Rick &amp; Morty
       </h1>
 
-      {isPending && (
-        <p className="text-muted-foreground text-sm">Loading characters…</p>
+      {isError && (
+        <Alert variant="destructive">
+          <TriangleAlert />
+          <AlertTitle>Could not load the characters.</AlertTitle>
+          <AlertAction>
+            <Button variant="outline" size="sm" onClick={() => refetch()}>
+              Try again
+            </Button>
+          </AlertAction>
+        </Alert>
       )}
 
-      {isError && (
-        <div className="space-y-3">
-          <p className="text-sm">Could not load the characters.</p>
-          <Button variant="outline" size="sm" onClick={() => refetch()}>
-            Try again
-          </Button>
-        </div>
-      )}
+      {isPending && <CharacterTableSkeleton />}
 
       {data && <CharacterTable characters={data.results} />}
     </div>
