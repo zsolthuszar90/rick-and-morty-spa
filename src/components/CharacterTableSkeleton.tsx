@@ -1,13 +1,6 @@
+import { CharacterTableShell } from '@/components/CharacterTableShell'
 import { Skeleton } from '@/components/ui/skeleton'
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 
 type CharacterTableSkeletonProps = {
   rows?: number
@@ -16,16 +9,7 @@ type CharacterTableSkeletonProps = {
 export const CharacterTableSkeleton = ({
   rows = 20,
 }: CharacterTableSkeletonProps) => (
-  <Table>
-    <TableCaption className="sr-only">Loading characters</TableCaption>
-    <TableHeader>
-      <TableRow>
-        <TableHead className="w-20">Avatar</TableHead>
-        <TableHead>Name</TableHead>
-        <TableHead>Species</TableHead>
-        <TableHead>Status</TableHead>
-      </TableRow>
-    </TableHeader>
+  <CharacterTableShell caption="Loading characters">
     <TableBody>
       {Array.from({ length: rows }, (_, row) => (
         <TableRow key={row}>
@@ -44,5 +28,5 @@ export const CharacterTableSkeleton = ({
         </TableRow>
       ))}
     </TableBody>
-  </Table>
+  </CharacterTableShell>
 )

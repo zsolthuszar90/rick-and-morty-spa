@@ -2,32 +2,16 @@ import { Link } from '@tanstack/react-router'
 
 import type { Character } from '@/api/types'
 import { CharacterAvatar } from '@/components/CharacterAvatar'
+import { CharacterTableShell } from '@/components/CharacterTableShell'
 import { StatusIndicator } from '@/components/StatusIndicator'
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 
 type CharacterTableProps = {
   characters: Character[]
 }
 
 export const CharacterTable = ({ characters }: CharacterTableProps) => (
-  <Table>
-    <TableCaption className="sr-only">Rick and Morty characters</TableCaption>
-    <TableHeader>
-      <TableRow>
-        <TableHead className="w-20">Avatar</TableHead>
-        <TableHead>Name</TableHead>
-        <TableHead>Species</TableHead>
-        <TableHead>Status</TableHead>
-      </TableRow>
-    </TableHeader>
+  <CharacterTableShell caption="Rick and Morty characters">
     <TableBody>
       {characters.map((character) => (
         <TableRow key={character.id}>
@@ -52,5 +36,5 @@ export const CharacterTable = ({ characters }: CharacterTableProps) => (
         </TableRow>
       ))}
     </TableBody>
-  </Table>
+  </CharacterTableShell>
 )
