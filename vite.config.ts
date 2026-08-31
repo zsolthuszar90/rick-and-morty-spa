@@ -24,5 +24,17 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     // Playwright owns e2e/, Vitest must not try to run those specs.
     exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text-summary', 'html'],
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'src/components/ui/**',
+        'src/routeTree.gen.ts',
+        'src/main.tsx',
+        'src/test/**',
+        '**/*.test.{ts,tsx}',
+      ],
+    },
   },
 })
