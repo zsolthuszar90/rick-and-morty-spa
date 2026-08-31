@@ -9,9 +9,33 @@ profile page for each. Coding assignment.
 
 ## Features
 
-The home page lists characters in a table with their avatar, name, species and
-status. Clicking a name opens that character's profile, which has a Back button.
-Both pages show a skeleton while loading and an alert if the request fails.
+The home page lists characters with their avatar, name, species and status.
+Clicking a name opens that character's profile, which has a Back button.
+
+Both bonus tasks are in. Search filters by name as you type, and the table is
+paginated with numbered pages. Both live in the URL, so any view can be
+refreshed, bookmarked or shared.
+
+Every state is handled rather than assumed: a skeleton while loading, an alert
+if a request fails, a message when a search matches nothing or a page doesn't
+exist, and a page for an address that matches no route at all. The layout works
+down to 320px, and the whole app is keyboard navigable.
+
+## Getting started
+
+```bash
+npm install
+npm run dev
+```
+
+`build` typechecks then builds, `preview` serves the result. `lint` runs oxlint,
+`format` and `format:check` run Prettier. `test` and `test:watch` run Vitest,
+`test:coverage` reports coverage, and `test:e2e` runs Playwright (needs
+`npx playwright install chromium` first).
+
+A pre-commit hook formats and lints the staged files, then typechecks and runs
+the tests. A pre-push hook runs the Playwright suite, which needs the network
+since it hits the real API. CI runs everything again on push.
 
 ## Toolchain decisions
 
@@ -84,24 +108,33 @@ finds nothing. The query lives in the URL as `?q=`, the input stays instant, and
 only the request is debounced.
 
 **The API's rate limit is left in place rather than worked around.** One page
-costs 21 requests against a limit of about 30, so user easily gets throttled. Requests retry past the block, and a toast explains the
-wait.
+costs 21 requests against a limit of about 30, so a user can reach it easily.
+Requests retry past the block, and a toast explains the wait.
 
 **Avatars have empty alt text.** The name is in the next cell, so a screen reader
 would otherwise announce it twice.
 
-## Getting started
+## Testing
 
-```bash
-npm install
-npm run dev
-```
+Unit tests cover the API client, including the two meanings of a 404, and the
+pagination range function, whose edge cases are easier to pin down as a pure
+function than through the UI. Component tests render the table, the profile, the
+avatar and the pagination, asserting through roles and visible text so they
+would catch the markup being rebuilt out of unlabelled `div`s. MSW answers the
+network, with unhandled requests set to fail the run rather than quietly reach
+the real API.
 
-`build` typechecks then builds, `preview` serves the result. `lint` runs oxlint,
-`format` and `format:check` run Prettier. `test` and `test:watch` run Vitest,
-`test:e2e` runs Playwright (needs `npx playwright install chromium` first), and
-`test:coverage` reports coverage.
+Playwright covers the app booting against a real production build.
 
-A pre-commit hook formats and lints the staged files, then typechecks and runs
-the tests. A pre-push hook runs the Playwright suite, which needs the network
-since it hits the real API. CI runs everything again on push.
+`npm run test:coverage` writes a report. It sits around 59%, and the gap is
+almost entirely the two route components — the parts an end-to-end suite covers
+better than a unit test does.
+
+## Project structure
+
+`src/api` holds the client, its types and the TanStack Query options, so the
+cache keys are defined once rather than repeated wherever a query is used.
+`src/routes` is file-based, so the URL structure is readable from the directory
+listing. `src/components` holds the app's own components with shadcn primitives
+under `ui/`, `src/hooks` the reusable behaviour, and `src/lib` the pure helpers.
+Tests sit next to what they test; `src/test` holds only setup and fixtures.
