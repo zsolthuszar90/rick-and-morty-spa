@@ -26,9 +26,14 @@ const HomePage = () => {
   const searchRef = useRef<HTMLInputElement>(null)
   const debouncedQuery = useDebouncedValue(q, SEARCH_DELAY_MS)
 
-  const { data, isPending, isError, refetch } = useQuery(
+  const { data, isPending, isError, isPlaceholderData, refetch } = useQuery(
     characterQueries.list({ name: debouncedQuery, page }),
   )
+
+  // keepPreviousData keeps the pagination on screen while the next page loads,
+  // but its rows belong to the page we just left, so the table shows a skeleton
+  // until the rows match the url.
+  const showingOtherPage = isPlaceholderData
 
   useDocumentMeta({
     title: q ? `Search: ${q}` : page > 1 ? `Page ${page}` : undefined,
@@ -100,7 +105,7 @@ const HomePage = () => {
         </p>
       )}
 
-      {isPending && <CharacterTableSkeleton />}
+      {(isPending || showingOtherPage) && <CharacterTableSkeleton />}
 
       {noResults &&
         (pageOutOfRange ? (
@@ -118,11 +123,12 @@ const HomePage = () => {
           </p>
         ))}
 
+      {data && !noResults && !showingOtherPage && (
+        <CharacterTable characters={data.results} scrollKey={page} />
+      )}
+
       {data && !noResults && (
-        <>
-          <CharacterTable characters={data.results} scrollKey={page} />
-          <CharacterPagination page={page} totalPages={data.info.pages} />
-        </>
+        <CharacterPagination page={page} totalPages={data.info.pages} />
       )}
     </div>
   )
