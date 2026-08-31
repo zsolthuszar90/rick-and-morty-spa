@@ -5,6 +5,8 @@
 Lists [Rick & Morty](https://rickandmortyapi.com/) characters in a table, with a
 profile page for each. Coding assignment.
 
+**Live: https://rick-and-morty-spa-fawn.vercel.app**
+
 ## Features
 
 The home page lists characters in a table with their avatar, name, species and
@@ -97,7 +99,8 @@ npm run dev
 
 `build` typechecks then builds, `preview` serves the result. `lint` runs oxlint,
 `format` and `format:check` run Prettier. `test` and `test:watch` run Vitest,
-`test:e2e` runs Playwright (needs `npx playwright install chromium` first).
+`test:e2e` runs Playwright (needs `npx playwright install chromium` first), and
+`test:coverage` reports coverage.
 
 A pre-commit hook formats and lints the staged files, then typechecks and runs
 the tests. A pre-push hook runs the Playwright suite, which needs the network
