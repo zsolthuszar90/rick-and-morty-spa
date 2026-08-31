@@ -14,10 +14,10 @@ export const CharacterTableSkeleton = ({
       {Array.from({ length: rows }, (_, row) => (
         <TableRow key={row}>
           <TableCell>
-            <Skeleton className="size-10 rounded-full" />
+            <Skeleton className="size-8 rounded-full sm:size-10" />
           </TableCell>
           <TableCell>
-            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 w-24 sm:w-32" />
           </TableCell>
           <TableCell>
             <Skeleton className="h-4 w-16" />

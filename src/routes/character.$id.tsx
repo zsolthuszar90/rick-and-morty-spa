@@ -38,7 +38,7 @@ const Layout = ({ children }: { children: ReactNode }) => (
 
 const CharacterProfileError = () => (
   <Layout>
-    <Button asChild variant="ghost" size="sm" className="-ml-2 self-start">
+    <Button asChild variant="ghost" size="sm" className="self-start">
       <Link to="/" search={{}}>
         <ArrowLeft />
         Back
@@ -83,12 +83,7 @@ const CharacterProfilePage = () => {
 
   return (
     <Layout>
-      <Button
-        variant="ghost"
-        size="sm"
-        className="-ml-2 self-start"
-        onClick={goBack}
-      >
+      <Button variant="ghost" size="sm" className="self-start" onClick={goBack}>
         <ArrowLeft />
         Back
       </Button>

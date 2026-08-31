@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
+import { useRef } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { TriangleAlert } from 'lucide-react'
+import { Search, TriangleAlert, X } from 'lucide-react'
 
 import { characterQueries } from '@/api/queries'
 import { CharacterPagination } from '@/components/CharacterPagination'
@@ -23,6 +24,7 @@ type HomeSearch = {
 const HomePage = () => {
   const { q = '', page = 1 } = Route.useSearch()
   const navigate = Route.useNavigate()
+  const searchRef = useRef<HTMLInputElement>(null)
   const debouncedQuery = useDebouncedValue(q, SEARCH_DELAY_MS)
 
   const { data, isPending, isError, refetch, failureCount, failureReason } =
@@ -39,25 +41,45 @@ const HomePage = () => {
   const pageOutOfRange = noResults && !debouncedQuery
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-6">
+    <div className="flex min-h-0 flex-1 flex-col gap-4 sm:gap-6">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
           Rick &amp; Morty
         </h1>
 
-        <Input
-          type="search"
-          value={q}
-          aria-label="Search characters by name"
-          placeholder="Search by name…"
-          className="sm:max-w-xs"
-          onChange={(event) =>
-            navigate({
-              search: { q: event.target.value || undefined, page: undefined },
-              replace: true,
-            })
-          }
-        />
+        <div className="relative sm:w-72">
+          <Search
+            aria-hidden
+            className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
+          />
+          <Input
+            ref={searchRef}
+            type="search"
+            value={q}
+            aria-label="Search characters by name"
+            placeholder="Search by name…"
+            className="px-9"
+            onChange={(event) =>
+              navigate({
+                search: { q: event.target.value || undefined, page: undefined },
+                replace: true,
+              })
+            }
+          />
+          {q && (
+            <button
+              type="button"
+              aria-label="Clear search"
+              className="hover:bg-accent focus-visible:ring-ring absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer rounded-sm p-1 focus-visible:ring-2 focus-visible:outline-none"
+              onClick={() => {
+                navigate({ search: {}, replace: true })
+                searchRef.current?.focus()
+              }}
+            >
+              <X className="size-4" />
+            </button>
+          )}
+        </div>
       </header>
 
       {isError && (
@@ -70,6 +92,14 @@ const HomePage = () => {
             </Button>
           </AlertAction>
         </Alert>
+      )}
+
+      {data && !noResults && (
+        <p className="text-muted-foreground -mt-2 text-sm">
+          {debouncedQuery
+            ? `${data.info.count} matching “${debouncedQuery}”`
+            : `${data.info.count} characters`}
+        </p>
       )}
 
       {isPending && <CharacterTableSkeleton />}
@@ -92,7 +122,7 @@ const HomePage = () => {
 
       {data && !noResults && (
         <>
-          <CharacterTable characters={data.results} />
+          <CharacterTable characters={data.results} scrollKey={page} />
           <CharacterPagination page={page} totalPages={data.info.pages} />
         </>
       )}

@@ -12,7 +12,7 @@ type StatusIndicatorProps = {
 }
 
 export const StatusIndicator = ({ status }: StatusIndicatorProps) => (
-  <span className="flex items-center gap-2">
+  <span className="flex items-center gap-1.5 sm:gap-2">
     <span className={cn('size-2 shrink-0 rounded-full', STATUS_DOT[status])} />
     {status}
   </span>

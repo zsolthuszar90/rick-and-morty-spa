@@ -6,7 +6,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 const RootLayout = () => {
   return (
     <div className="bg-background text-foreground flex h-svh flex-col overflow-hidden">
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col overflow-hidden px-4 py-10">
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col overflow-hidden px-3 py-6 sm:px-4 sm:py-10">
         <Outlet />
       </main>
 

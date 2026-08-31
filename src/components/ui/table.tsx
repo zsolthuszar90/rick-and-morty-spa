@@ -5,10 +5,15 @@ import { cn } from '@/lib/utils'
 function Table({
   className,
   containerClassName,
+  containerRef,
   ...props
-}: React.ComponentProps<'table'> & { containerClassName?: string }) {
+}: React.ComponentProps<'table'> & {
+  containerClassName?: string
+  containerRef?: React.Ref<HTMLDivElement>
+}) {
   return (
     <div
+      ref={containerRef}
       data-slot="table-container"
       className={cn('relative w-full overflow-x-auto', containerClassName)}
     >
@@ -59,7 +64,7 @@ function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
     <tr
       data-slot="table-row"
       className={cn(
-        'hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors',
+        'hover:bg-accent/60 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors',
         className,
       )}
       {...props}
