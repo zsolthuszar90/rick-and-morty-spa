@@ -19,6 +19,8 @@ const toSearch = (target: number) => (prev: { q?: string }) => ({
 
 const stepClass = cn(buttonVariants({ variant: 'ghost' }), 'gap-1')
 
+const ACTIVE_EXACT = { exact: true, includeSearch: true } as const
+
 type StepProps = {
   to: number
   label: string
@@ -36,6 +38,7 @@ const Step = ({ to, label, disabled, children }: StepProps) => (
       <Link
         to="/"
         search={toSearch(to)}
+        activeOptions={ACTIVE_EXACT}
         aria-label={label}
         className={stepClass}
       >
@@ -74,8 +77,8 @@ export const CharacterPagination = ({
               <Link
                 to="/"
                 search={toSearch(slot)}
+                activeOptions={ACTIVE_EXACT}
                 aria-label={`Page ${slot}`}
-                aria-current={slot === page ? 'page' : undefined}
                 className={buttonVariants({
                   variant: slot === page ? 'default' : 'ghost',
                   size: 'icon',

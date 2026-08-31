@@ -8,7 +8,7 @@ import {
 import { render } from '@testing-library/react'
 import type { ReactNode } from 'react'
 
-export const renderWithRouter = async (ui: ReactNode) => {
+export const renderWithRouter = async (ui: ReactNode, at = '/') => {
   const rootRoute = createRootRoute()
 
   const routeTree = rootRoute.addChildren([
@@ -26,7 +26,7 @@ export const renderWithRouter = async (ui: ReactNode) => {
 
   const router = createRouter({
     routeTree,
-    history: createMemoryHistory({ initialEntries: ['/'] }),
+    history: createMemoryHistory({ initialEntries: [at] }),
   })
 
   await router.load()

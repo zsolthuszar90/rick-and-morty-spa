@@ -14,7 +14,10 @@ describe('CharacterPagination', () => {
   })
 
   it('marks the current page for assistive technology', async () => {
-    await renderWithRouter(<CharacterPagination page={3} totalPages={42} />)
+    await renderWithRouter(
+      <CharacterPagination page={3} totalPages={42} />,
+      '/?page=3',
+    )
 
     expect(screen.getByRole('link', { name: 'Page 3' })).toHaveAttribute(
       'aria-current',
@@ -23,10 +26,16 @@ describe('CharacterPagination', () => {
     expect(screen.getByRole('link', { name: 'Page 2' })).not.toHaveAttribute(
       'aria-current',
     )
+    expect(screen.getByRole('link', { name: 'Page 1' })).not.toHaveAttribute(
+      'aria-current',
+    )
   })
 
   it('omits the page number from the first page link', async () => {
-    await renderWithRouter(<CharacterPagination page={3} totalPages={42} />)
+    await renderWithRouter(
+      <CharacterPagination page={3} totalPages={42} />,
+      '/?page=3',
+    )
 
     expect(screen.getByRole('link', { name: 'Page 1' })).toHaveAttribute(
       'href',
