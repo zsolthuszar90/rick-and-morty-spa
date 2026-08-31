@@ -118,17 +118,19 @@ would otherwise announce it twice.
 
 Unit tests cover the API client, including the two meanings of a 404, and the
 pagination range function, whose edge cases are easier to pin down as a pure
-function than through the UI. Component tests render the table, the profile, the
-avatar and the pagination, asserting through roles and visible text so they
-would catch the markup being rebuilt out of unlabelled `div`s. MSW answers the
-network, with unhandled requests set to fail the run rather than quietly reach
-the real API.
+function than through the UI. Component tests assert through roles and visible
+text, so they would catch the markup being rebuilt out of unlabelled `div`s. MSW
+answers the network, and an unhandled request fails the run rather than quietly
+reaching the real API.
 
-Playwright covers the app booting against a real production build.
+Playwright covers the journeys end to end against a production build and the
+real API, including the dead ends: no matches, no such page, no such character,
+no such route. Avatars are aborted there, since they are twenty of the
+twenty-one requests a page makes and nothing asserts on them.
 
-`npm run test:coverage` writes a report. It sits around 59%, and the gap is
-almost entirely the two route components — the parts an end-to-end suite covers
-better than a unit test does.
+`npm run test:coverage` sits around 60%. The gap is almost entirely the two
+route components, which the end-to-end suite covers better than a unit test
+would.
 
 ## Project structure
 
