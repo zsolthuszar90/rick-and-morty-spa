@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useApiRetryToast } from '@/hooks/useApiRetryToast'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
+import { useDocumentMeta } from '@/hooks/useDocumentMeta'
 
 const SEARCH_DELAY_MS = 300
 
@@ -28,6 +29,11 @@ const HomePage = () => {
     useQuery(characterQueries.list({ name: debouncedQuery, page }))
 
   useApiRetryToast(failureCount, failureReason)
+
+  useDocumentMeta({
+    title: q ? `Search: ${q}` : page > 1 ? `Page ${page}` : undefined,
+    description: 'Browse Rick & Morty characters and their profiles.',
+  })
 
   const noResults = data?.results.length === 0
   const pageOutOfRange = noResults && !debouncedQuery

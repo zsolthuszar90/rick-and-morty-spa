@@ -15,6 +15,7 @@ import { CharacterProfileSkeleton } from '@/components/CharacterProfileSkeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { useApiRetryToast } from '@/hooks/useApiRetryToast'
+import { useDocumentMeta } from '@/hooks/useDocumentMeta'
 
 const parseId = (value: string) => {
   const id = Number(value)
@@ -61,6 +62,14 @@ const CharacterProfilePage = () => {
     useQuery(characterQueries.detail(id))
 
   useApiRetryToast(failureCount, failureReason)
+
+  useDocumentMeta({
+    title: data?.name,
+    description: data
+      ? `${data.name}: ${data.species}, ${data.status}, from ${data.origin.name}.`
+      : 'A Rick & Morty character profile.',
+    image: data?.image,
+  })
 
   const goBack = () => {
     if (router.history.canGoBack()) {
