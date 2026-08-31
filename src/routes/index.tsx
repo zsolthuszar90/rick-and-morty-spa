@@ -10,7 +10,6 @@ import { CharacterTableSkeleton } from '@/components/CharacterTableSkeleton'
 import { Alert, AlertAction, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useApiRetryToast } from '@/hooks/useApiRetryToast'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
 
@@ -27,10 +26,9 @@ const HomePage = () => {
   const searchRef = useRef<HTMLInputElement>(null)
   const debouncedQuery = useDebouncedValue(q, SEARCH_DELAY_MS)
 
-  const { data, isPending, isError, refetch, failureCount, failureReason } =
-    useQuery(characterQueries.list({ name: debouncedQuery, page }))
-
-  useApiRetryToast(failureCount, failureReason)
+  const { data, isPending, isError, refetch } = useQuery(
+    characterQueries.list({ name: debouncedQuery, page }),
+  )
 
   useDocumentMeta({
     title: q ? `Search: ${q}` : page > 1 ? `Page ${page}` : undefined,

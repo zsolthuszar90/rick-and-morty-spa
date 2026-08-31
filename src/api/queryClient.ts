@@ -1,12 +1,17 @@
-import { QueryClient } from '@tanstack/react-query'
+import { QueryCache, QueryClient } from '@tanstack/react-query'
 
 import { isRetryableError } from './characters'
+import { notifyWhileRetrying } from './retryToast'
 
 const BLIP_RETRY_MS = 1_000
 const PAST_RATE_LIMIT_MS = 10_000
 
-export const createQueryClient = () =>
-  new QueryClient({
+export const createQueryClient = () => {
+  const queryCache = new QueryCache()
+  notifyWhileRetrying(queryCache)
+
+  return new QueryClient({
+    queryCache,
     defaultOptions: {
       queries: {
         // The Rick & Morty dataset is static, so cached pages stay valid for a while.
@@ -18,3 +23,4 @@ export const createQueryClient = () =>
       },
     },
   })
+}

@@ -14,7 +14,6 @@ import { CharacterProfile } from '@/components/CharacterProfile'
 import { CharacterProfileSkeleton } from '@/components/CharacterProfileSkeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { useApiRetryToast } from '@/hooks/useApiRetryToast'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
 
 const parseId = (value: string) => {
@@ -58,10 +57,9 @@ const CharacterProfilePage = () => {
   const router = useRouter()
   const navigate = useNavigate()
 
-  const { data, isPending, isError, error, failureCount, failureReason } =
-    useQuery(characterQueries.detail(id))
-
-  useApiRetryToast(failureCount, failureReason)
+  const { data, isPending, isError, error } = useQuery(
+    characterQueries.detail(id),
+  )
 
   useDocumentMeta({
     title: data?.name,
