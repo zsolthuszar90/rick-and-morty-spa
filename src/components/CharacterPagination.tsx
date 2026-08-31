@@ -77,7 +77,7 @@ export const CharacterPagination = ({
                 aria-label={`Page ${slot}`}
                 aria-current={slot === page ? 'page' : undefined}
                 className={buttonVariants({
-                  variant: slot === page ? 'outline' : 'ghost',
+                  variant: slot === page ? 'default' : 'ghost',
                   size: 'icon',
                 })}
               >
