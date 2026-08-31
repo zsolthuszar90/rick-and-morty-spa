@@ -24,11 +24,10 @@ const HomePage = () => {
   const navigate = Route.useNavigate()
   const debouncedQuery = useDebouncedValue(q, SEARCH_DELAY_MS)
 
-  const { data, isPending, isError, refetch, failureCount } = useQuery(
-    characterQueries.list({ name: debouncedQuery, page }),
-  )
+  const { data, isPending, isError, refetch, failureCount, failureReason } =
+    useQuery(characterQueries.list({ name: debouncedQuery, page }))
 
-  useApiRetryToast(failureCount)
+  useApiRetryToast(failureCount, failureReason)
 
   const noResults = data?.results.length === 0
   const pageOutOfRange = noResults && !debouncedQuery

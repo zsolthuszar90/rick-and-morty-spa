@@ -12,6 +12,9 @@ export class ApiError extends Error {
   }
 }
 
+export const isRetryableError = (error: unknown) =>
+  !(error instanceof ApiError && error.status < 500)
+
 export const EMPTY_PAGE: CharacterPage = {
   info: { count: 0, pages: 0, next: null, prev: null },
   results: [],

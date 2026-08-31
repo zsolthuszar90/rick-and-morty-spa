@@ -1,6 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  Link,
+  useNavigate,
+  useRouter,
+} from '@tanstack/react-router'
 import { ArrowLeft, TriangleAlert } from 'lucide-react'
+import type { ReactNode } from 'react'
 
 import { ApiError } from '@/api/characters'
 import { characterQueries } from '@/api/queries'
@@ -18,16 +24,43 @@ const parseId = (value: string) => {
   return id
 }
 
+const NOT_FOUND = {
+  title: 'That character does not exist.',
+  description: 'Check the address, or go back to the character list.',
+}
+
+const Layout = ({ children }: { children: ReactNode }) => (
+  <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto">
+    {children}
+  </div>
+)
+
+const CharacterProfileError = () => (
+  <Layout>
+    <Button asChild variant="ghost" size="sm" className="-ml-2 self-start">
+      <Link to="/" search={{}}>
+        <ArrowLeft />
+        Back
+      </Link>
+    </Button>
+
+    <Alert variant="destructive">
+      <TriangleAlert />
+      <AlertTitle>{NOT_FOUND.title}</AlertTitle>
+      <AlertDescription>{NOT_FOUND.description}</AlertDescription>
+    </Alert>
+  </Layout>
+)
+
 const CharacterProfilePage = () => {
   const { id } = Route.useParams()
   const router = useRouter()
   const navigate = useNavigate()
 
-  const { data, isPending, isError, error, failureCount } = useQuery(
-    characterQueries.detail(id),
-  )
+  const { data, isPending, isError, error, failureCount, failureReason } =
+    useQuery(characterQueries.detail(id))
 
-  useApiRetryToast(failureCount)
+  useApiRetryToast(failureCount, failureReason)
 
   const goBack = () => {
     if (router.history.canGoBack()) {
@@ -40,7 +73,7 @@ const CharacterProfilePage = () => {
   const notFound = error instanceof ApiError && error.status === 404
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto">
+    <Layout>
       <Button
         variant="ghost"
         size="sm"
@@ -57,20 +90,18 @@ const CharacterProfilePage = () => {
         <Alert variant="destructive">
           <TriangleAlert />
           <AlertTitle>
-            {notFound
-              ? 'That character does not exist.'
-              : 'Could not load this character.'}
+            {notFound ? NOT_FOUND.title : 'Could not load this character.'}
           </AlertTitle>
           <AlertDescription>
             {notFound
-              ? 'Check the address, or go back to the character list.'
+              ? NOT_FOUND.description
               : 'Something went wrong while loading this character.'}
           </AlertDescription>
         </Alert>
       )}
 
       {data && <CharacterProfile character={data} />}
-    </div>
+    </Layout>
   )
 }
 
@@ -79,5 +110,6 @@ export const Route = createFileRoute('/character/$id')({
     parse: ({ id }) => ({ id: parseId(id) }),
     stringify: ({ id }) => ({ id: String(id) }),
   },
+  errorComponent: CharacterProfileError,
   component: CharacterProfilePage,
 })
